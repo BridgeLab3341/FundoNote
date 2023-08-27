@@ -1,0 +1,236 @@
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using RepoLayer.Context;
+using RepoLayer.Enitities;
+using RepoLayer.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RepoLayer.Service
+{
+    public class NoteRepo : INoteRepo
+    {
+        public readonly NewFundoContext fundoContext;
+        private readonly IConfiguration configuration;
+        public NoteRepo(NewFundoContext fundoContext, IConfiguration configuration)
+        {
+            this.fundoContext = fundoContext;
+            this.configuration = configuration;
+        }
+        public async Task<NoteEntitiy> AddNote(NoteRegistrationModel note, long userId)
+        {
+            try
+            {
+                var user = await fundoContext.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+                NoteEntitiy entitiy = new NoteEntitiy();
+                entitiy.Title = note.Title;
+                entitiy.Description = note.Description;
+                entitiy.BGColor = note.BGColor;
+                entitiy.Archive = note.Archive;
+                entitiy.Remainder = note.Remainder;
+                entitiy.Pin = note.Pin;
+                entitiy.Trash = note.Trash;
+                entitiy.CreatedTime = note.CreatedTime;
+                entitiy.UpdatedTime = note.UpdatedTime;
+                entitiy.UserId = userId;
+                await fundoContext.Notes.AddAsync(entitiy);
+                await fundoContext.SaveChangesAsync();
+                if (entitiy != null)
+                {
+                    return entitiy;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<List<NoteEntitiy>> GetAllNotes(long userId)
+        {
+
+            try
+            {
+                var entitiys = await fundoContext.Notes.Where(x => x.UserId == userId).ToListAsync();
+                if (entitiys != null)
+                {
+                    return entitiys;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<NoteEntitiy> UpdateNote(NoteUpdateModel model, long userId)
+        {
+            try
+            {
+                var entity = await fundoContext.Notes.FirstOrDefaultAsync(x => x.UserId == userId);
+                if (entity != null)
+                {
+                    entity.Title = model.Title;
+                    entity.Description = model.Description;
+                    entity.BGColor = model.BGColor;
+                    entity.Archive = model.Archive;
+                    entity.Remainder = model.Remainder;
+                    entity.Pin = model.Pin;
+                    entity.Trash = model.Trash;
+                    entity.UpdatedTime = model.UpdatedTime;
+                    await fundoContext.SaveChangesAsync();
+                    return entity;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<NoteEntitiy> DeleteNote(long noteId)
+        {
+            try
+            {
+                NoteEntitiy noteEntitiy = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId);
+                if (noteEntitiy != null)
+                {
+                    fundoContext.Notes.Remove(noteEntitiy);
+                    await fundoContext.SaveChangesAsync();
+                    return noteEntitiy;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<NoteEntitiy> ArchieveNote(long noteId, long userId)
+        {
+            try
+            {
+                var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
+                if (resu != null)
+                {
+                    if (resu.Archive == false)
+                    {
+                        resu.Archive = true;
+                    }
+                    else
+                    {
+                        resu.Archive = false;
+                    }
+                    await fundoContext.SaveChangesAsync();
+                    return resu;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<NoteEntitiy> TrashNote(long noteId, long userId)
+        {
+            try
+            {
+                var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
+                if (resu != null)
+                {
+                    if (resu.Trash == false)
+                    {
+                        resu.Trash = true;
+                    }
+                    else
+                    {
+                        resu.Trash = false;
+                    }
+                    await fundoContext.SaveChangesAsync();
+                    return resu;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<NoteEntitiy> PinUnPin(long noteId, long userId)
+        {
+            try
+            {
+                var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
+                if (resu != null)
+                {
+                    if (resu.Pin == false)
+                    {
+                        resu.Pin = true;
+                    }
+                    else
+                    {
+                        resu.Pin = false;
+                    }
+                    await fundoContext.SaveChangesAsync();
+                    return resu;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<NoteEntitiy> ChangeColor(long noteId, int userId, string newColor)
+        {
+            try
+            {
+                var res = await fundoContext.Notes.FirstOrDefaultAsync(u => u.NoteId == noteId && u.UserId == userId);
+                if (res != null)
+                {
+                    res.BGColor = newColor;
+                    await fundoContext.SaveChangesAsync();
+                    return await fundoContext.Notes.Where(a => a.NoteId == noteId).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+    }
+}
