@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NewFundoNote.Controllers
 {
@@ -269,6 +270,29 @@ namespace NewFundoNote.Controllers
                     await distributedCache.SetAsync(cacheKey, redisNotesList, options);
                 }
                 return Ok(new { success = true, message = "Redis User Found Successfully", data = NoteList });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Route("FindKeyWord")]
+        public async Task<IActionResult> SearchKeyWord(string keyword)
+        {
+            try
+            {
+                var userid = long.Parse(User.FindFirst("UserId").Value);
+                var result = await noteBusiness.FindKeyWord(userid, keyword);
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Found KeyWord successfully", data = result });
+                }
+                else
+                {
+                    return Ok(new { success = false, message = "Not Found KeyWord Unsuccessfull" });
+                }
             }
             catch (Exception)
             {

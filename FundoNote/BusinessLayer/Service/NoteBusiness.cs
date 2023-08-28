@@ -118,5 +118,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public async Task<List<NoteEntitiy>> FindKeyWord(long userId, string keyWord)
+        {
+            try
+            {
+                return await noteRepo.FindKeyWord(userId, keyWord);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

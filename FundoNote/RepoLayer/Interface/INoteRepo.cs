@@ -19,5 +19,6 @@ namespace RepoLayer.Interface
         public Task<NoteEntitiy> PinUnPin(long noteId, long userId);
         public Task<NoteEntitiy> ChangeColor(long noteId, int userId, string newColor);
         public Task<string> UploadImage(long noteid, long userid, IFormFile image);
+        public Task<List<NoteEntitiy>> FindKeyWord(long userId, string keyWord);
     }
 }

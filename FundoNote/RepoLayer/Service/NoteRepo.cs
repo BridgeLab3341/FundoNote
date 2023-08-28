@@ -10,6 +10,7 @@ using RepoLayer.Enitities;
 using RepoLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -252,6 +253,25 @@ namespace RepoLayer.Service
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
                 string secureurl = uploadResult.SecureUrl.ToString();
                 return "Image Url : " + secureurl;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<NoteEntitiy>> FindKeyWord(long userId, string keyWord)
+        {
+            try
+            {
+                var result = await fundoContext.Notes.Where(x => x.UserId == userId && x.Title.Contains(keyWord)).ToListAsync();
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception)
             {
