@@ -41,7 +41,7 @@ namespace NewFundoNote.Controllers
             }
         }
         [HttpPost]
-        [Route("Login")]
+        [Route("Login/{Email}/{Password}")]
         public async Task<IActionResult> Login(UserLoginModel userLoginData)
         {
             try
@@ -63,7 +63,7 @@ namespace NewFundoNote.Controllers
         }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        [Route("GetRecords")]
+        [Route("GetAllRecords")]
         public async Task<IActionResult> GetAllRecords()
         {
             try
@@ -83,9 +83,9 @@ namespace NewFundoNote.Controllers
                 throw;
             }
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        [Route("GetUserId")]
+        [Route("GetById")]
         public async Task<IActionResult> GetByUserId([FromQuery] GetUserIdModel model)
         {
             try
@@ -171,7 +171,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("ResetPassword")]
+        [Route("ResetPassword/{Confirmpassword}")]
         public async Task<IActionResult> UserResetPassword(string password, string confirmpassword)
         {
             try

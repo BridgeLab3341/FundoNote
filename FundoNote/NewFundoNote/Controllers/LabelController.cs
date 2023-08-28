@@ -19,14 +19,14 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("AddLabel")]
-        public IActionResult AddLabels(long noteId, string labName)
+        [Route("AddLabel/{noteId}/{labelName}")]
+        public IActionResult AddLabels(long noteId, string labelName)
         {
             try
             {
                 var userIdClaim = User.FindFirst("UserId");
                 var userId = long.Parse(userIdClaim.Value);
-                var result = labelBusiness.AddingLabel(userId, noteId, labName);
+                var result = labelBusiness.AddingLabel(userId, noteId, labelName);
                 if (result != null)
                 {
                     return Ok(new { success = true, message = "LabelName Added successfully", data = result });
@@ -67,7 +67,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        [Route("GetLabelByNoteId")]
+        [Route("GetLabelByNoteId/{noteId}")]
         public IActionResult GetLabelByNoteID(long noteid)
         {
             try
@@ -89,13 +89,13 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
-        [Route("DeleteLabel")]
-        public IActionResult DeleteLabels(long labId)
+        [Route("DeleteLabel/{labelId}")]
+        public IActionResult DeleteLabels(long labelId)
         {
             try
             {
                 var userId = long.Parse(User.FindFirst("UserId").Value);
-                var result = labelBusiness.RemoveLabel(labId, userId);
+                var result = labelBusiness.RemoveLabel(labelId, userId);
                 if (result != null)
                 {
                     return Ok(new { success = true, message = "LabelName Deleted successfully", data = result });
@@ -112,13 +112,13 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("UpdateLabel")]
-        public IActionResult UpdateLabels(long labId, string labName)
+        [Route("UpdateLabel/{labelId}/{labelName}")]
+        public IActionResult UpdateLabels(long labelId, string labelName)
         {
             try
             {
                 var userId = long.Parse(User.FindFirst("UserId").Value);
-                var result = labelBusiness.UpdateLabel(labId, userId, labName);
+                var result = labelBusiness.UpdateLabel(labelId, userId, labelName);
                 if (result != null)
                 {
                     return Ok(new { success = true, message = "LabelName Deleted successfully", data = result });

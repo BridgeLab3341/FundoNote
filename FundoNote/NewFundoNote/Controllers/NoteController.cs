@@ -82,7 +82,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("UpdateNote")]
+        [Route("UpdateNote/{userId}")]
         public async Task<IActionResult> UpdateRecords(NoteUpdateModel model, long userId)
         {
             try
@@ -104,7 +104,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
-        [Route("DeleteNote")]
+        [Route("DeleteNote/{noteId}")]
         public async Task<IActionResult> DeletNoteByNoteId(long noteId)
         {
             try
@@ -126,7 +126,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("Archive")]
+        [Route("ArchiveNote/{noteId}")]
         public async Task<IActionResult> NoteArchieve(long noteId)
         {
             try
@@ -149,7 +149,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("Trash")]
+        [Route("IsTrash/{noteId}")]
         public async Task<IActionResult> NoteTrash(long noteId)
         {
             try
@@ -172,7 +172,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("Pin/UnPin")]
+        [Route("IsPinned/{noteId}")]
         public async Task<IActionResult> Pin(long noteId)
         {
             try
@@ -195,7 +195,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("BGColor")]
+        [Route("ChangeColorNote/{noteId}")]
         public async Task<IActionResult> BGColor(long noteId, string color)
         {
             try
@@ -219,7 +219,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("ImageUpload")]
+        [Route("ImageUpload/{noteId}")]
         public async Task<IActionResult> ImageUpload(long noteId, IFormFile image)
         {
             try
@@ -242,7 +242,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        [Route("Redis")]
+        [Route("GetAllNotesRedis")]
         public async Task<IActionResult> GetAllByRedis()
         {
             try

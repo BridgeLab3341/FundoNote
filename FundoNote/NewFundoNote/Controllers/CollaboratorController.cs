@@ -22,7 +22,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("AddCollaborator")]
+        [Route("AddCollaborator/{noteId}/{email}")]
         public IActionResult AddCollaborator(long noteId, string email)
         {
             try
@@ -49,14 +49,14 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
-        [Route("DeleteCollaborator")]
-        public IActionResult DeleteCollaborator(long collobId, long noteid)
+        [Route("DeleteCollaborator/{collobId}/{noteId}")]
+        public IActionResult DeleteCollaborator(long collobId, long noteId)
         {
             try
             {
                 var userIdClaim = User.FindFirst("UserId");
                 long userId = long.Parse(userIdClaim.Value);
-                var result = business.DeletingCollaborator(collobId, noteid, userId);
+                var result = business.DeletingCollaborator(collobId, noteId, userId);
                 if (result != null)
                 {
                     return Ok(new { success = true, message = "Collaborated Email Removed successfully", data = result });
