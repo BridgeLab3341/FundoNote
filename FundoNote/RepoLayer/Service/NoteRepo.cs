@@ -232,5 +232,31 @@ namespace RepoLayer.Service
                 throw e;
             }
         }
+        public async Task<string> UploadImage(long noteid, long userid, IFormFile image)
+        {
+            try
+            {
+                Account cloudinaryAccount = new Account(
+                    configuration["Cloudinary:CloudName"],
+                    configuration["Cloudinary:APIKey"],
+                    configuration["Cloudinary:APISecret"]
+                    );
+                var user = await fundoContext.Notes.FirstOrDefaultAsync(x => x.UserId == userid && x.NoteId == noteid);
+                Cloudinary cloudinary = new Cloudinary(cloudinaryAccount);
+
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(image.FileName, image.OpenReadStream()),
+                    Transformation = new Transformation().Crop("fit").Gravity("face"),
+                };
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                string secureurl = uploadResult.SecureUrl.ToString();
+                return "Image Url : " + secureurl;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

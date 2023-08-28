@@ -217,5 +217,28 @@ namespace NewFundoNote.Controllers
                 throw;
             }
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("ImageUpload")]
+        public async Task<IActionResult> ImageUpload(long noteId, IFormFile image)
+        {
+            try
+            {
+                var userid = long.Parse(User.FindFirst("UserId").Value);
+                var result = await noteBusiness.UploadImage(noteId, userid, image);
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Image Uploaded successfull", data = result });
+                }
+                else
+                {
+                    return Ok(new { success = false, message = "Image Not Uploaded Unsuccessfull" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
