@@ -6,7 +6,6 @@ namespace CommonLayer.Model
 {
     public class NoteRegistrationModel
     {
-        public long NoteId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string BGColor { get; set; }
