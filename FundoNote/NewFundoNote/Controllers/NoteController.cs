@@ -240,5 +240,40 @@ namespace NewFundoNote.Controllers
                 return BadRequest($"An error occurred: {ex.Message}");
             }
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Route("Redis")]
+        public async Task<IActionResult> GetAllByRedis()
+        {
+            try
+            {
+                var cacheKey = "NotesList";
+                string serializedNotesList;
+                var NoteList = new List<NoteEntitiy>();
+                var redisNotesList = await distributedCache.GetAsync(cacheKey);
+                if (redisNotesList != null)
+                {
+                    serializedNotesList = Encoding.UTF8.GetString(redisNotesList);
+                    NoteList = JsonConvert.DeserializeObject<List<NoteEntitiy>>(serializedNotesList);
+                }
+                else
+                {
+                    var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                    var userId = Int32.Parse(userid.Value);
+                    NoteList = await noteBusiness.GetAllNotes(userId);
+                    serializedNotesList = JsonConvert.SerializeObject(NoteList);
+                    redisNotesList = Encoding.UTF8.GetBytes(serializedNotesList);
+                    var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(10))
+                        .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                    await distributedCache.SetAsync(cacheKey, redisNotesList, options);
+                }
+                return Ok(new { success = true, message = "Redis User Found Successfully", data = NoteList });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
