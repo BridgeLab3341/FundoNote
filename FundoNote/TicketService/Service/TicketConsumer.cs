@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TicketService.Service
 {
-    public class TicketConsumer : IConsumer<CollabCreateModel>
+    public class TicketConsumer : IConsumer<Collaborator>
     {
-        public async Task Consume(ConsumeContext<CollabCreateModel> context)
+        public async Task Consume(ConsumeContext<Collaborator> context)
         {
             var data = context.Message;
             //Validate the Ticket Data
@@ -20,7 +20,7 @@ namespace TicketService.Service
             var smtp = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("somubridgelabz@gmail.com", "cetlksorseuswhng"),
+                Credentials = new NetworkCredential("somubridgelabz@gmail.com", "crauayaudvfyhumw"),
                 EnableSsl = true,
             };
             smtp.Send("somubridgelabz@gmail.com", email, subject, body);

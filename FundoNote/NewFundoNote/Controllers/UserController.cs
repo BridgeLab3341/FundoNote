@@ -41,7 +41,7 @@ namespace NewFundoNote.Controllers
             }
         }
         [HttpPost]
-        [Route("Login/{Email}/{Password}")]
+        [Route("Login")]
         public async Task<IActionResult> Login(UserLoginModel userLoginData)
         {
             try

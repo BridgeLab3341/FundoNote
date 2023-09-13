@@ -9,6 +9,9 @@ using RepoLayer.Context;
 using MassTransit;
 using CommonLayer.Model;
 using Microsoft.VisualBasic;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Threading.Tasks;
 
 namespace NewFundoNote.Controllers
 {
@@ -18,11 +21,13 @@ namespace NewFundoNote.Controllers
     {
         private readonly NewFundoContext context;
         private readonly ICollaboratorBusiness business;
+        private readonly IBus bus;
 
-        public CollaboratorController(NewFundoContext context, ICollaboratorBusiness business)
+        public CollaboratorController(NewFundoContext context, ICollaboratorBusiness business, IBus bus)
         {
             this.context = context;
             this.business = business;
+            this.bus = bus;
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
@@ -95,6 +100,35 @@ namespace NewFundoNote.Controllers
                 }
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("SendEmail")]
+        public async Task<IActionResult> SendEmail(long noteId, Collaborator collab)
+        {
+            try
+            {
+                //var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                long userId = long.Parse(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                string email = User.FindFirst(ClaimTypes.Email).Value;
+                var result = business.AddingCollaborator(userId, noteId,email,collab);
+                if(result!=null)
+                {
+                    Uri uri = new Uri("rabbitmq://localhost/ticketQueue");
+                    var endPoint =await bus.GetSendEndpoint(uri);
+                    await endPoint.Send(collab);
+                    var message = collab.Email;
+                    return Ok(new { message = "Successfully Send Message to Rabbit MQ", data = message });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Unsuccesful" });
+                }
+            }
+            catch(Exception)
             {
                 throw;
             }
