@@ -55,7 +55,7 @@ namespace NewFundoNote.Controllers
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured While Adding Note");
             }
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

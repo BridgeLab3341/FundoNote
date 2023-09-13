@@ -1,5 +1,8 @@
 using BusinessLayer.Interface;
 using BusinessLayer.Service;
+using CommonLayer.Model;
+using GreenPipes;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace NewFundoNote
 {
-    public class Startup
+    public class Startup 
     {
         public Startup(IConfiguration configuration)
         {
@@ -98,7 +101,19 @@ namespace NewFundoNote
                 options.Configuration = "localhost:6379";
             });
             //RabbitMQ service
+            services.AddMassTransit(x =>
+            {
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    var host = cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                    {
+                        h.Username("guest");
+                        h.Password("guest");
+                    });
+                }));
+            });
 
+            services.AddMassTransitHostedService();
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

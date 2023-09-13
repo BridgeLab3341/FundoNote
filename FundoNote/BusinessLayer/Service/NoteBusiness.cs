@@ -27,7 +27,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured While Adding Note");
             }
         }
         public async Task<List<NoteEntitiy>> GetAllNotes(long userId)
@@ -38,7 +38,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured While Fetching All Note");
             }
         }
         public async Task<NoteEntitiy> UpdateNote(NoteUpdateModel model, long userId)
@@ -49,7 +49,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured While Updating Note");
             }
         }
         public async Task<NoteEntitiy> DeleteNote(long noteId)
@@ -60,7 +60,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured While Deleting Note");
             }
         }
         public async Task<NoteEntitiy> ArchieveNote(long noteId, long userId)
@@ -71,7 +71,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured at ArchieveNote");
             }
         }
         public async Task<NoteEntitiy> TrashNote(long noteId, long userId)
@@ -82,7 +82,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured at TrashNote");
             }
         }
         public async Task<NoteEntitiy> PinUnPin(long noteId, long userId)
@@ -93,7 +93,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured at PinUnPin");
             }
         }
         public async Task<NoteEntitiy> ChangeColor(long noteId, int userId, string newColor)
@@ -104,7 +104,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured while Changing Color");
             }
         }
         public async Task<string> UploadImage(long noteid, long userid, IFormFile image)
@@ -115,7 +115,7 @@ namespace BusinessLayer.Service
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured while Uploading Image");
             }
         }
         public async Task<List<NoteEntitiy>> FindKeyWord(long userId, string keyWord)
@@ -124,9 +124,9 @@ namespace BusinessLayer.Service
             {
                 return await noteRepo.FindKeyWord(userId, keyWord);
             }
-            catch(Exception)
+            catch (Exception)
             {
-                throw;
+                throw new Exception("Exception Occured while Searching key Word");
             }
         }
     }

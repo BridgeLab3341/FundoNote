@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommonLayer.Model;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using RepoLayer.Context;
 using RepoLayer.Enitities;
 using RepoLayer.Interface;
@@ -13,11 +15,13 @@ namespace RepoLayer.Service
     public class CollaboratorRepo : ICollaboratorRepo
     {
         public readonly NewFundoContext fundoContext;
-        public CollaboratorRepo(NewFundoContext fundoContext)
+        private readonly IBus _bus;
+        public CollaboratorRepo(NewFundoContext fundoContext, IBus _bus)
         {
             this.fundoContext = fundoContext;
+            this._bus = _bus;
         }
-        public async Task<CollaboratorEntity> AddingCollaborator(long userId, long noteId, string email)
+        public async Task<CollaboratorEntity> AddingCollaborator(long userId, long noteId, string email,Collaborator collab)
         {
             try
             {
@@ -26,10 +30,9 @@ namespace RepoLayer.Service
                 CollaboratorEntity collaborator = new CollaboratorEntity()
                 {
                     user = user,
-                    Note = note
+                    Note = note,
                 };
-                collaborator.CollaboratorEmail = email;
-                await fundoContext.Collaborator.AddAsync(collaborator);
+                await _bus.Publish(collab);
                 await fundoContext.SaveChangesAsync();
                 return collaborator;
             }
@@ -78,7 +81,6 @@ namespace RepoLayer.Service
             {
                 throw ex;
             }
-
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace Consumer.MicroServices
+namespace CollaboratorConsumer
 {
     public class WeatherForecast
     {

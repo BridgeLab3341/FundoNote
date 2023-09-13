@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using CommonLayer.Model;
 using RepoLayer.Enitities;
 using RepoLayer.Interface;
 using System;
@@ -15,11 +16,11 @@ namespace BusinessLayer.Service
         {
             this.collaborator = collaborator;
         }
-        public async Task<CollaboratorEntity> AddingCollaborator(long userId, long noteId, string email)
+        public async Task<CollaboratorEntity> AddingCollaborator(long userId, long noteId, string email, Collaborator collab)
         {
             try
             {
-                return await collaborator.AddingCollaborator(userId, noteId, email);
+                return await collaborator.AddingCollaborator(userId, noteId, email,collab);
             }
             catch (Exception ex)
             {

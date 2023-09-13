@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
 using RepoLayer.Context;
+using MassTransit;
+using CommonLayer.Model;
+using Microsoft.VisualBasic;
 
 namespace NewFundoNote.Controllers
 {
@@ -15,6 +18,7 @@ namespace NewFundoNote.Controllers
     {
         private readonly NewFundoContext context;
         private readonly ICollaboratorBusiness business;
+
         public CollaboratorController(NewFundoContext context, ICollaboratorBusiness business)
         {
             this.context = context;
@@ -23,7 +27,7 @@ namespace NewFundoNote.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         [Route("AddCollaborator/{noteId}/{email}")]
-        public IActionResult AddCollaborator(long noteId, string email)
+        public IActionResult AddCollaborator(long noteId, string email, Collaborator collab)
         {
             try
             {
@@ -32,7 +36,7 @@ namespace NewFundoNote.Controllers
                 {
                     return BadRequest(new { success = false, message = "Invalid user ID in the token" });
                 }
-                var result = business.AddingCollaborator(userId, noteId, email);
+                var result = business.AddingCollaborator(userId, noteId, email,collab);
                 if (result != null)
                 {
                     return Ok(new { success = true, message = "Email Collaborated successfully", data = result });
