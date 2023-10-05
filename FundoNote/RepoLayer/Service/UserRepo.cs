@@ -173,7 +173,7 @@ namespace RepoLayer.Service
                  new Claim(ClaimTypes.Email, email),
                  new Claim("UserId",id.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddMinutes(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

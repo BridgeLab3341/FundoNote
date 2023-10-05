@@ -28,6 +28,7 @@ namespace TicketService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<TicketConsumer>();
@@ -49,6 +50,8 @@ namespace TicketService
             });
             services.AddMassTransitHostedService();
             services.AddControllers();
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

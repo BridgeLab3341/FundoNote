@@ -105,7 +105,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
-        [Route("DeleteNote/{noteId}")]
+        [Route("DeleteNote")]
         public async Task<IActionResult> DeletNoteByNoteId(long noteId)
         {
             try
@@ -127,7 +127,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("ArchiveNote/{noteId}")]
+        [Route("ArchiveNote")]
         public async Task<IActionResult> NoteArchieve(long noteId)
         {
             try
@@ -150,7 +150,7 @@ namespace NewFundoNote.Controllers
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        [Route("IsTrash/{noteId}")]
+        [Route("IsTrash")]
         public async Task<IActionResult> NoteTrash(long noteId)
         {
             try

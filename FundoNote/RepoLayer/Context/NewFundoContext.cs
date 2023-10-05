@@ -11,6 +11,7 @@ namespace RepoLayer.Context
         public NewFundoContext(DbContextOptions options)
             : base(options)
         {
+
         }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<NoteEntitiy> Notes { get; set; }

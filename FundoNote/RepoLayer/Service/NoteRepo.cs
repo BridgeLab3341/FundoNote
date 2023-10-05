@@ -135,13 +135,13 @@ namespace RepoLayer.Service
                 var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
                 if (resu != null)
                 {
-                    if (resu.Archive == false)
+                    if (resu.Archive == true)
                     {
-                        resu.Archive = true;
+                        resu.Archive = false;
                     }
                     else
                     {
-                        resu.Archive = false;
+                        resu.Archive = true;
                     }
                     await fundoContext.SaveChangesAsync();
                     return resu;
@@ -163,13 +163,13 @@ namespace RepoLayer.Service
                 var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
                 if (resu != null)
                 {
-                    if (resu.Trash == false)
+                    if (resu.Trash == true)
                     {
-                        resu.Trash = true;
+                        resu.Trash = false;
                     }
                     else
                     {
-                        resu.Trash = false;
+                        resu.Trash = true;
                     }
                     await fundoContext.SaveChangesAsync();
                     return resu;
@@ -191,13 +191,13 @@ namespace RepoLayer.Service
                 var resu = await fundoContext.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId && x.UserId == userId);
                 if (resu != null)
                 {
-                    if (resu.Pin == false)
+                    if (resu.Pin == true)
                     {
-                        resu.Pin = true;
+                        resu.Pin = false;
                     }
                     else
                     {
-                        resu.Pin = false;
+                        resu.Pin = true;
                     }
                     await fundoContext.SaveChangesAsync();
                     return resu;
