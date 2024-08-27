@@ -252,5 +252,9 @@ namespace RepoLayer.Service
                 throw ex;
             }
         }
+        public string SomethingPersonal()
+        {
+            return ("string Data");
+        }
     }
 }
